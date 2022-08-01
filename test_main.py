@@ -20,12 +20,14 @@ def client():
 
     yield client
 
-
-
 def test_health(client):
     response = client.get('/')
     assert response.status_code == 200
-    assert response.json == 'Healthy'
+    assert response.json == 'Healthy' 
+
+def test_health(client):
+    response = client.get('/hh')
+    assert response.status_code == 404
 
 
 def test_auth(client):
@@ -38,3 +40,15 @@ def test_auth(client):
     assert response.status_code == 200
     token = response.json['token']
     assert token is not None
+
+def test_auth_error(client):
+    body = {'email': EMAIL,
+            'password': PASSWORD}
+    response = client.post('/auth/hh', 
+                           data=json.dumps(body),
+                           content_type='application/json')
+
+    assert response.status_code == 404
+
+
+    
